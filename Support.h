@@ -11,6 +11,12 @@ int timeLastFetch;
 
 // Wifi things
 #include <ESP8266WiFi.h>
+
+#include <WiFiClient.h>
+#include <ESP8266WebServer.h>
+
+ESP8266WebServer server(80);
+
 const char *ssid = "WifiNetwork";
 const char *password = "Password";
 

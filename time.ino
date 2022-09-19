@@ -6,6 +6,7 @@ void fetchTime() {
   timeFetch.min = timeClient.getMinutes();
   timeFetch.sec = timeClient.getSeconds();
   timeLastFetch = millis();
+  timeClient.end();
 }
 
 void getRealTime() {
@@ -17,6 +18,6 @@ void getRealTime() {
   timeReal.min = timeReal.min % 60;
   timeReal.hour = timeReal.hour % 24;
 
-  Serial.printf("%d:%d:%d -- %d", timeReal.hour, timeReal.min, timeReal.sec,sec);
-  Serial.printf(" --%d:%d:%d\n", timeFetch.hour, timeFetch.min, timeFetch.sec,sec);
+  //Serial.printf("%d:%d:%d -- %d", timeReal.hour, timeReal.min, timeReal.sec, sec);
+  //Serial.printf(" --%d:%d:%d\n", timeFetch.hour, timeFetch.min, timeFetch.sec, sec);
 }

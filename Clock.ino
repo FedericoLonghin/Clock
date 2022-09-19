@@ -7,9 +7,17 @@ void setup() {
   strip.show();
   strip.setBrightness(brightness_pv);
   clockMode = CONNECTING;
+
+  server.on("/strip", handleStrip);
+    server.on("/strip", handleStrip);
+
+  server.begin();
+
 }
 
 void loop() {
+  server.handleClient();
+
   //BTN
   if (!digitalRead(BTN_PIN) && millis() - lastTimeBTNPressed > 200) {
     if (stripMode == AUTO_ON || stripMode == MAN_ON) {
@@ -71,4 +79,5 @@ void loop() {
       clockMode = NORMAL;
       break;
   }
+
 }
