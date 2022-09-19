@@ -9,10 +9,17 @@ void setup() {
   clockMode = CONNECTING;
 
   server.on("/strip", handleStrip);
-    server.on("/strip", handleStrip);
+  server.on("/timer", handleTimer);
 
   server.begin();
 
+
+  ///////////////////////////////
+  timerCentSecLength = 100;
+  timerCentSecEnd = timerCentSecLength + (millis() / 10);
+  onTimer = 1;
+  clockMode = TIMER;
+  ///////////////////////////////////////
 }
 
 void loop() {
@@ -42,7 +49,7 @@ void loop() {
       brightness_sp = 0;
     } else {
       stripMode = AUTO_ON;
-      brightness_sp = brightness_default;
+      if (!timerRing) brightness_sp = brightness_default;
     }
   }
   if (stripMode == MAN_ON && !darkEnviroment()) stripMode = AUTO_ON;
@@ -78,6 +85,9 @@ void loop() {
       fetchTime();
       clockMode = NORMAL;
       break;
+    case TIMER:
+      if (!timerRing) getRemainingTime();
+      drawTimer();
+      break;
   }
-
 }

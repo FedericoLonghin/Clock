@@ -33,7 +33,7 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org");
 #include <Adafruit_NeoPixel.h>
 #define LED_PIN 12
 #define LED_COUNT 60
-byte brightness_sp = 50, brightness_pv = 0, brightness_default = 50;
+byte brightness_sp = 50, brightness_pv = 0, brightness_default = 50, brightness_flashHigh = 150, brightness_flashLow = 20;
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRBW + NEO_KHZ800);
 #define PIXEL_ROTATION_OFFSET 1
 
@@ -44,9 +44,10 @@ Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRBW + NEO_KHZ800);
 #define PHR_LOWLIGHT_THRESHOLD 40
 
 enum clockMode {
-  DARK = 0,
-  NORMAL = 1,
-  CONNECTING = 2
+  DARK,
+  NORMAL,
+  CONNECTING,
+  TIMER
 };
 enum stripMode {
   MAN_OFF,
@@ -59,3 +60,8 @@ byte clockMode = CONNECTING, stripMode = AUTO_ON;
 byte fadeStepDuration = 10;
 bool inFade;
 int lastTimeBTNPressed, lastFadeStep;
+
+bool onTimer, timerRing;
+long int timerCentSecLength, timerCentSecEnd, timerCentSecLeft;
+int timerPixelCount;
+float timerPixelCountFloat;

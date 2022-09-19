@@ -21,3 +21,10 @@ void getRealTime() {
   //Serial.printf("%d:%d:%d -- %d", timeReal.hour, timeReal.min, timeReal.sec, sec);
   //Serial.printf(" --%d:%d:%d\n", timeFetch.hour, timeFetch.min, timeFetch.sec, sec);
 }
+void getRemainingTime() {
+  timerCentSecLeft = timerCentSecEnd - (millis() / 10);
+  if (timerCentSecLeft <= 0) {
+    timerRing = 1;
+    brightness_sp = brightness_flashHigh;
+  }
+}

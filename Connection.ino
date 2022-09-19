@@ -24,3 +24,12 @@ void handleStrip() {
   server.send(200, "text/plain", String(stripMode));
   Serial.println("request");
 }
+void handleTimer() {
+  timerCentSecLength = server.arg("len").toInt() * 100;
+  timerCentSecEnd = timerCentSecLength + (millis() / 10);
+  onTimer = 1;
+  clockMode = TIMER;
+
+  server.sendHeader("Access-Control-Allow-Origin", "*");
+  server.send(200, "text/plain", "Timer setted!");
+}
