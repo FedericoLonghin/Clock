@@ -71,5 +71,4 @@ void loop() {
       clockMode = NORMAL;
       break;
   }
-  Serial.println(brightness_pv);
 }

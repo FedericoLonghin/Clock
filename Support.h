@@ -1,10 +1,10 @@
 struct timeUnit {
-  byte hour;
-  byte min;
-  byte sec;
+  int hour;
+  int min;
+  int sec;
 };
 struct timeUnit timeReal;
-struct timeUnit timeFetc;
+struct timeUnit timeFetch;
 int timeLastFetch;
 
 
