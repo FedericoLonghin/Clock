@@ -5,24 +5,59 @@ void setup() {
   pinMode(BTN_PIN, INPUT_PULLUP);
   strip.begin();
   strip.show();
-  strip.setBrightness(BRIGHTNESS);
+  strip.setBrightness(brightness_pv);
   clockMode = CONNECTING;
 }
 
 void loop() {
-  if (!digitalRead(BTN_PIN)) {
-    if (stripMode == AUTO_ON || stripMode == MAN_ON) stripMode = MAN_OFF;
-    else if (stripMode == AUTO_OFF) stripMode = MAN_ON;
-    else stripMode = MAN_ON;
-    while (!digitalRead(BTN_PIN))
-      ;
+  //BTN
+  if (!digitalRead(BTN_PIN) && millis() - lastTimeBTNPressed > 200) {
+    if (stripMode == AUTO_ON || stripMode == MAN_ON) {
+      stripMode = MAN_OFF;
+      brightness_sp = 0;
+    } else if (stripMode == AUTO_OFF) {
+
+      stripMode = MAN_ON;
+      brightness_sp = brightness_default;
+
+    } else {
+      stripMode = MAN_ON;
+      brightness_sp = brightness_default;
+    }
+    lastTimeBTNPressed = millis();
   }
-  if (stripMode != MAN_OFF && stripMode != MAN_ON) stripMode = darkEnviroment() ? AUTO_OFF : AUTO_ON;
+
+  //PHOTORESISTOR
+  if (stripMode != MAN_OFF && stripMode != MAN_ON) {
+    if (darkEnviroment()) {
+      stripMode = AUTO_OFF;
+      brightness_sp = 0;
+    } else {
+      stripMode = AUTO_ON;
+      brightness_sp = brightness_default;
+    }
+  }
   if (stripMode == MAN_ON && !darkEnviroment()) stripMode = AUTO_ON;
+
+  //BRIGHTNESS ADJUSTMENT
+  if (brightness_sp != brightness_pv) {
+
+    if (millis() - lastFadeStep > fadeStepDuration) {
+      lastFadeStep = millis();
+      inFade = 1;
+      if (brightness_pv < brightness_sp) brightness_pv++;
+      else brightness_pv--;
+      strip.setBrightness(brightness_pv);
+      strip.show();
+    }
+  } else inFade = 0;
+
   switch (clockMode * (stripMode == MAN_ON || stripMode == AUTO_ON)) {
     case DARK:
-      strip.clear();
-      strip.show();
+      if (!inFade) {
+        strip.clear();
+        strip.show();
+      }
       break;
     case NORMAL:
       getRealTime();
@@ -36,4 +71,5 @@ void loop() {
       clockMode = NORMAL;
       break;
   }
+  Serial.println(brightness_pv);
 }
