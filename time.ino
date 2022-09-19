@@ -17,6 +17,6 @@ void getRealTime() {
   timeReal.min = timeReal.min % 60;
   timeReal.hour = timeReal.hour % 24;
 
-  // Serial.printf("%d:%d:%d", timeReal.hour, timeReal.min, timeReal.sec);
-  //Serial.println();
+  Serial.printf("%d:%d:%d", timeReal.hour, timeReal.min, timeReal.sec);
+  Serial.println();
 }

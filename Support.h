@@ -38,8 +38,14 @@ Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRBW + NEO_KHZ800);
 #define PHR_LOWLIGHT_THRESHOLD 40
 
 enum clockMode {
-  DARK,
-  NORMAL,
-  CONNECTING
+  DARK = 0,
+  NORMAL = 1,
+  CONNECTING = 2
 };
-byte clockMode = 0;
+enum stripMode {
+  MAN_OFF,
+  MAN_ON,
+  AUTO_OFF,
+  AUTO_ON
+};
+byte clockMode = CONNECTING, stripMode = AUTO_ON;
