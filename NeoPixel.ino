@@ -1,0 +1,19 @@
+void drawTime() {
+  strip.clear();
+  drawPointer(timeReal.hour * 5, 5, strip.Color(255, 0, 0));
+  drawPointer(timeReal.min, 3, strip.Color(0, 255, 0));
+  drawPointer(timeReal.sec, 1, strip.Color(0, 0, 255));
+  strip.show();
+}
+
+
+void drawPointer(byte num, byte size, uint32_t color) {
+  for (byte i = 1; i <= size; i++) {
+    int pix = ((59 - (num - ((size + 1) / 2) + i)) + PIXEL_ROTATION_OFFSET) % 60;
+    pix = pix < 0 ? (pix + 60) : pix;
+
+    //Serial.printf("%d ", pix);
+    strip.setPixelColor(pix, color);
+  }
+  //Serial.println("");
+}
