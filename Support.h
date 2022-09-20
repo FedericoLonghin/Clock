@@ -57,7 +57,7 @@ enum stripMode {
   FADING
 };
 byte clockMode = CONNECTING, stripMode = AUTO_ON;
-byte fadeStepDuration = 10;
+byte fadeStepDuration = 5;
 bool inFade;
 int lastTimeBTNPressed, lastFadeStep;
 

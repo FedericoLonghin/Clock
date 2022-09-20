@@ -1,4 +1,5 @@
 void fetchTime() {
+
   timeClient.begin();
   timeClient.setTimeOffset(7200);
   timeClient.update();

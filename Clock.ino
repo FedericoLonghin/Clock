@@ -12,18 +12,9 @@ void setup() {
   server.on("/timer", handleTimer);
 
   server.begin();
-
-
-  ///////////////////////////////
-  timerCentSecLength = 100;
-  timerCentSecEnd = timerCentSecLength + (millis() / 10);
-  onTimer = 1;
-  clockMode = TIMER;
-  ///////////////////////////////////////
 }
 
 void loop() {
-  server.handleClient();
 
   //BTN
   if (!digitalRead(BTN_PIN) && millis() - lastTimeBTNPressed > 200) {
@@ -43,13 +34,13 @@ void loop() {
   }
 
   //PHOTORESISTOR
-  if (stripMode != MAN_OFF && stripMode != MAN_ON) {
+  if (clockMode != TIMER && stripMode != MAN_OFF && stripMode != MAN_ON) {
     if (darkEnviroment()) {
       stripMode = AUTO_OFF;
       brightness_sp = 0;
     } else {
       stripMode = AUTO_ON;
-      if (!timerRing) brightness_sp = brightness_default;
+      brightness_sp = brightness_default;
     }
   }
   if (stripMode == MAN_ON && !darkEnviroment()) stripMode = AUTO_ON;
@@ -90,4 +81,5 @@ void loop() {
       drawTimer();
       break;
   }
+  server.handleClient();
 }

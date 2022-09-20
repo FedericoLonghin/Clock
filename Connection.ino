@@ -21,7 +21,7 @@ void handleStrip() {
     brightness_sp = brightness_default;
   }
   server.sendHeader("Access-Control-Allow-Origin", "*");
-  server.send(200, "text/plain", String(stripMode));
+  server.send(200, "text/html", "<!DOCTYPE html><html><head> <meta name='viewport' content='width=device-width, initial-scale=1'> <title>Clock</title></head><body><h1>Done!</h1></body></html>");
   Serial.println("request");
 }
 void handleTimer() {
@@ -31,5 +31,5 @@ void handleTimer() {
   clockMode = TIMER;
 
   server.sendHeader("Access-Control-Allow-Origin", "*");
-  server.send(200, "text/plain", "Timer setted!");
+  server.send(200, "text/html", "<!DOCTYPE html><html><head> <meta name='viewport' content='width=device-width, initial-scale=1'> <title>Clock</title></head><body><h1>Done!</h1></body></html>");
 }

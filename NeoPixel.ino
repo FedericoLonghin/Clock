@@ -18,12 +18,14 @@ void drawPointer(byte num, byte size, uint32_t color) {
   //Serial.println("");
 }
 void drawTimer() {
+  strip.clear();
   if (timerRing) {
     strip.fill(strip.Color(255, 0, 0));
     if (brightness_pv == brightness_flashLow) brightness_sp = brightness_flashHigh;
     if (brightness_pv == brightness_flashHigh) brightness_sp = brightness_flashLow;
     byte i = 0;
     while (!digitalRead(BTN_PIN)) {
+      strip.setBrightness(brightness_default);
       if (i < 60) {
         for (byte j = 0; j <= i; j++) {
           strip.setPixelColor(59 - j, strip.Color(255, 255, 0));
@@ -44,7 +46,6 @@ void drawTimer() {
 
     timerPixelCountFloat = (timerCentSecLength - timerCentSecLeft);
     timerPixelCount = (timerPixelCountFloat / timerCentSecLength) * 60;
-    Serial.printf(" length:%d, secLeft:%d, perc:%d \n", timerCentSecLength, timerCentSecLeft, timerPixelCount);
     for (byte i = 0; i < timerPixelCount; i++) {
       strip.setPixelColor(59 - i, strip.Color(255, 255, 0));
     }
