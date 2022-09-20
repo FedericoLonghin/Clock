@@ -10,13 +10,14 @@ void setup() {
 
   server.on("/strip", handleStrip);
   server.on("/timer", handleTimer);
+  server.on("/alarm", handleAlarm);
 
   server.begin();
 }
 
 void loop() {
-
   //BTN
+  if (clockRinging) ring(ringCause, alarmNumberRinging);
   if (!digitalRead(BTN_PIN) && millis() - lastTimeBTNPressed > 200) {
     if (stripMode == AUTO_ON || stripMode == MAN_ON) {
       stripMode = MAN_OFF;
@@ -34,7 +35,7 @@ void loop() {
   }
 
   //PHOTORESISTOR
-  if (clockMode != TIMER && stripMode != MAN_OFF && stripMode != MAN_ON) {
+  if (!clockRinging && stripMode != MAN_OFF && stripMode != MAN_ON) {
     if (darkEnviroment()) {
       stripMode = AUTO_OFF;
       brightness_sp = 0;
@@ -58,6 +59,9 @@ void loop() {
     }
   } else inFade = 0;
 
+  if (!clockRinging) checkForAlarms();
+
+  //CLOCK_MODE MANAGER
   switch (clockMode * (stripMode == MAN_ON || stripMode == AUTO_ON)) {
     case DARK:
       if (!inFade) {
@@ -77,9 +81,15 @@ void loop() {
       clockMode = NORMAL;
       break;
     case TIMER:
-      if (!timerRing) getRemainingTime();
+      if (!clockRinging) getRemainingTime();
       drawTimer();
+      break;
+    case RINGING:
+      strip.show();
       break;
   }
   server.handleClient();
+  /*for(byte i=0;i<existingAlarms;i++){
+  Serial.printf("Alarm n. %d --- dayCode:%d%d%d%d%d%d%d,%d, %d:%d\n",i,alarms[i].weekDay[0],alarms[i].weekDay[1],alarms[i].weekDay[2],alarms[i].weekDay[3],alarms[i].weekDay[4],alarms[i].weekDay[5],alarms[i].weekDay[6],alarms[i].oneTime,alarms[i].hour,alarms[i].min);
+}*/
 }

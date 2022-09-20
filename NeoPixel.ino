@@ -17,38 +17,55 @@ void drawPointer(byte num, byte size, uint32_t color) {
   }
   //Serial.println("");
 }
-void drawTimer() {
-  strip.clear();
-  if (timerRing) {
-    strip.fill(strip.Color(255, 0, 0));
-    if (brightness_pv == brightness_flashLow) brightness_sp = brightness_flashHigh;
-    if (brightness_pv == brightness_flashHigh) brightness_sp = brightness_flashLow;
-    byte i = 0;
-    while (!digitalRead(BTN_PIN)) {
-      strip.setBrightness(brightness_default);
-      if (i < 60) {
-        for (byte j = 0; j <= i; j++) {
-          strip.setPixelColor(59 - j, strip.Color(255, 255, 0));
-        }
-        strip.show();
-        delay(fadeStepDuration);
-        i++;
-      } else {
-        clockMode = NORMAL;
-        onTimer = 0;
-        timerRing = 0;
-        lastTimeBTNPressed = millis();
-      }
-    }
-  }
 
-  else {
+
+void drawTimer() {
+  if (!clockRinging) {
+    strip.clear();
 
     timerPixelCountFloat = (timerCentSecLength - timerCentSecLeft);
     timerPixelCount = (timerPixelCountFloat / timerCentSecLength) * 60;
     for (byte i = 0; i < timerPixelCount; i++) {
       strip.setPixelColor(59 - i, strip.Color(255, 255, 0));
     }
+    strip.show();
   }
-  strip.show();
+}
+
+void ring(bool ringType, byte alarmNumber) {
+  clockMode = RINGING;
+  clockRinging = 1;
+  strip.fill(strip.Color(255, 0, 0));
+  if (brightness_pv == brightness_flashLow) brightness_sp = brightness_flashHigh;
+  if (brightness_pv == brightness_flashHigh) brightness_sp = brightness_flashLow;
+  //Serial.printf("sp:%d,pv:%d\n", brightness_sp, brightness_pv);
+  byte i = 0;
+  while (!digitalRead(BTN_PIN)) {
+    strip.setBrightness(brightness_default);
+    if (i < 60) {
+      for (byte j = 0; j <= i; j++) {
+        strip.setPixelColor(59 - j, strip.Color(255, 255, 0));
+      }
+      strip.show();
+      delay(fadeStepDuration);
+      i++;
+    } else {
+      if (clockRinging) {  //entering here only one time
+        clockRinging = 0;
+        clockMode = NORMAL;
+        if (TIMER_RING) {
+
+          onTimer = 0;
+          timerRing = 0;
+        } else if (ALARM_RING) {
+          if (alarms[alarmNumber].oneTime) {
+          }  //delete the alarm
+          else {
+            alarms[alarmNumber].alreadyRinged = 1;
+          }
+        }
+      }
+      lastTimeBTNPressed = millis();
+    }
+  }
 }

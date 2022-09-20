@@ -2,11 +2,25 @@ struct timeUnit {
   int hour;
   int min;
   int sec;
+  int weekDay;
 };
 struct timeUnit timeReal;
 struct timeUnit timeFetch;
 int timeLastFetch;
 
+
+struct alarm {
+  int hour;
+  int min;
+  bool oneTime;
+  bool weekDay[7];
+  bool alreadyRinged;
+};
+String weekDayShort[7] = { "sun", "mon", "tue", "wed", "thu", "fri", "sat" };
+
+struct alarm alarms[5];
+byte existingAlarms = 0;
+bool alarmsForToday = 1;
 
 
 // Wifi things
@@ -47,7 +61,8 @@ enum clockMode {
   DARK,
   NORMAL,
   CONNECTING,
-  TIMER
+  TIMER,
+  RINGING
 };
 enum stripMode {
   MAN_OFF,
@@ -55,6 +70,10 @@ enum stripMode {
   AUTO_OFF,
   AUTO_ON,
   FADING
+};
+enum ringType {
+  TIMER_RING,
+  ALARM_RING
 };
 byte clockMode = CONNECTING, stripMode = AUTO_ON;
 byte fadeStepDuration = 5;
@@ -65,3 +84,6 @@ bool onTimer, timerRing;
 long int timerCentSecLength, timerCentSecEnd, timerCentSecLeft;
 int timerPixelCount;
 float timerPixelCountFloat;
+bool clockRinging;
+bool ringCause;
+byte alarmNumberRinging;
