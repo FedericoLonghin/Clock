@@ -35,25 +35,15 @@ void getRemainingTime() {
   }
 }
 
-void checkForTodayAlarm() {
-  alarmsForToday = 0;
-  for (byte i = 0; i < existingAlarms; i++) {
-    if (alarms[i].weekDay[timeReal.weekDay]) {
-      alarmsForToday = 1;
-      Serial.println("alarm for today");
-    }
-  }
-}
 
 void checkForAlarms() {
-  if (alarmsForToday) {
     for (byte i = 0; i < existingAlarms; i++) {
       if (!alarms[i].alreadyRinged && alarms[i].weekDay[timeReal.weekDay] && alarms[i].hour == timeReal.hour && alarms[i].min == timeReal.min) {
         brightness_sp = brightness_flashHigh;
         ringCause = ALARM_RING;
         alarmNumberRinging = i;
         clockRinging = 1;
-      }
+      
     }
   }
 }

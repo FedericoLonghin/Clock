@@ -11,6 +11,7 @@ void setup() {
   server.on("/strip", handleStrip);
   server.on("/timer", handleTimer);
   server.on("/alarm", handleAlarm);
+  server.on("/alarmList", handleAlarmList);
 
   server.begin();
 }

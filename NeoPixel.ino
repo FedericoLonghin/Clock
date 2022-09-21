@@ -58,8 +58,13 @@ void ring(bool ringType, byte alarmNumber) {
           onTimer = 0;
           timerRing = 0;
         } else if (ALARM_RING) {
-          if (alarms[alarmNumber].oneTime) {
-          }  //delete the alarm
+          if (alarms[alarmNumber].oneTime) {//delete the alarm
+            for(byte y=alarmNumber;y<existingAlarms;y++){
+              alarms[y]=alarms[y+1];
+            }
+            existingAlarms--;
+            
+          }  
           else {
             alarms[alarmNumber].alreadyRinged = 1;
           }

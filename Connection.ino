@@ -51,3 +51,28 @@ void handleAlarm() {
     server.send(200, "text/html", "<!DOCTYPE html><html><head> <meta name='viewport' content='width=device-width, initial-scale=1'> <title>Clock</title></head><body><h1>Too many Alarms!</h1></body></html>");
   }
 }
+
+void handleAlarmList() {
+  String page = "<!DOCTYPE html><html><head> <meta name='viewport' content='width=device-width, initial-scale=1'> <title>Clock</title></head><body><h1>Alarm list:</h1>";
+  for (byte i = 0; i < existingAlarms; i++) {
+    page += "<p>Alarm n.";
+    page += i;
+    page += " --- dayCode:";
+    page += alarms[i].weekDay[0];
+    page += alarms[i].weekDay[1];
+    page += alarms[i].weekDay[2];
+    page += alarms[i].weekDay[3];
+    page += alarms[i].weekDay[4];
+    page += alarms[i].weekDay[5];
+    page += alarms[i].weekDay[6];
+    page += " - Onetime:";
+    page += alarms[i].oneTime;
+    page += " - ";
+    page += alarms[i].hour;
+    page += ":";
+    page+= alarms[i].min;
+  }
+  page += "</body></html>";
+  server.sendHeader("Access-Control-Allow-Origin", "*");
+  server.send(200, "text/html", page);
+}
