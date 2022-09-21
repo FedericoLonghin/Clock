@@ -31,8 +31,8 @@ bool alarmsForToday = 1;
 
 ESP8266WebServer server(80);
 
-//String ssid = "";
-//String password = "";
+String ssid = "";
+String password = "";
 
 bool wifiMode;
 

@@ -3,7 +3,7 @@
 void setup() {
   Serial.begin(9600);
   EEPROM.begin(512);
-  //EEPROM.write(50,2);EEPROM.commit();
+  //EEPROM.write(50,0);EEPROM.commit();
   pinMode(BTN_PIN, INPUT_PULLUP);
   strip.begin();
   strip.show();
@@ -95,7 +95,7 @@ void loop() {
       break;
   }
   server.handleClient();
-  for (byte i = 0; i < existingAlarms; i++) {
+ /* for (byte i = 0; i < existingAlarms; i++) {
     Serial.printf("Alarm n. %d --- dayCode:%d%d%d%d%d%d%d,%d, %d:%d\n", i, alarms[i].weekDay[0], alarms[i].weekDay[1], alarms[i].weekDay[2], alarms[i].weekDay[3], alarms[i].weekDay[4], alarms[i].weekDay[5], alarms[i].weekDay[6], alarms[i].oneTime, alarms[i].hour, alarms[i].min);
-  }
+  }*/
 }
