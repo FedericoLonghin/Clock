@@ -12,7 +12,7 @@ void fetchTime() {
 }
 
 void getRealTime() {
-  unsigned long int sec = (millis() - timeLastFetch) / 1000;
+  unsigned long int sec = ((millis() - timeLastFetch) + TIME_CORRECTION_CONSTANT) / 1000;
   timeReal.sec = (timeFetch.sec + sec);
   timeReal.min = (timeFetch.min + timeReal.sec / 60);
   timeReal.hour = (timeFetch.hour + timeReal.min / 60);
@@ -35,15 +35,25 @@ void getRemainingTime() {
   }
 }
 
-
 void checkForAlarms() {
-    for (byte i = 0; i < existingAlarms; i++) {
-      if (!alarms[i].alreadyRinged && alarms[i].weekDay[timeReal.weekDay] && alarms[i].hour == timeReal.hour && alarms[i].min == timeReal.min) {
-        brightness_sp = brightness_flashHigh;
-        ringCause = ALARM_RING;
-        alarmNumberRinging = i;
-        clockRinging = 1;
-      
+  for (byte i = 0; i < existingAlarms; i++) {
+    if (!alarms[i].alreadyRinged && alarms[i].weekDay[timeReal.weekDay] && alarms[i].hour == timeReal.hour && alarms[i].min == timeReal.min) {
+      brightness_sp = brightness_flashHigh;
+      ringCause = ALARM_RING;
+      alarmNumberRinging = i;
+      clockRinging = 1;
+    } else if (alarms[i].hour != timeReal.hour || alarms[i].min != timeReal.min) {
+      alarms[i].alreadyRinged = 0;
     }
+  }
+}
+
+void deleteAlarm(byte al) {
+  if (existingAlarms > 0) {
+    for (byte y = al; y < existingAlarms; y++) {
+      alarms[y] = alarms[y + 1];
+    }
+    existingAlarms--;
+    WriteAlarmsToEEPROM();
   }
 }

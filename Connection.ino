@@ -44,7 +44,7 @@ void handleAlarm() {
     alarms[existingAlarms].hour = server.arg("hour").toInt();
     alarms[existingAlarms].min = server.arg("min").toInt();
     existingAlarms++;
-    WriteAlarmsToEEPROM();    
+    WriteAlarmsToEEPROM();
     server.sendHeader("Access-Control-Allow-Origin", "*");
     server.send(200, "text/html", "<!DOCTYPE html><html><head> <meta name='viewport' content='width=device-width, initial-scale=1'> <title>Clock</title></head><body><h1>Done!</h1></body></html>");
   } else {
@@ -57,7 +57,7 @@ void handleAlarmList() {
   String page = "<!DOCTYPE html><html><head> <meta name='viewport' content='width=device-width, initial-scale=1'> <title>Clock</title></head><body><h1>Alarm list:</h1>";
   for (byte i = 0; i < existingAlarms; i++) {
     page += "<p>Alarm n.";
-    page += i;
+    page += i + 1;
     page += " --- dayCode:";
     page += alarms[i].weekDay[0];
     page += alarms[i].weekDay[1];
@@ -74,6 +74,21 @@ void handleAlarmList() {
     page += alarms[i].min;
   }
   page += "</body></html>";
+  server.sendHeader("Access-Control-Allow-Origin", "*");
+  server.send(200, "text/html", page);
+}
+
+void handleDelete() {
+  String page = "";
+  byte al = server.arg("alarm").toInt();
+  if (al && al - 1 <= existingAlarms) {  //check if the number argument is present in the query
+    deleteAlarm(al - 1);
+    page += "<!DOCTYPE html><html><head> <meta name='viewport' content='width=device-width, initial-scale=1'> <title>Clock</title></head><body><h1>Deleted alarm n. ";
+    page += al;
+    page += "</h1></body></html>";
+  } else {
+    page += "<!DOCTYPE html><html><head> <meta name='viewport' content='width=device-width, initial-scale=1'> <title>Clock</title></head><body><h1>Please, specify the number! </h1></body></html>";
+  }
   server.sendHeader("Access-Control-Allow-Origin", "*");
   server.send(200, "text/html", page);
 }

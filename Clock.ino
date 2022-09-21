@@ -14,6 +14,7 @@ void setup() {
   server.on("/timer", handleTimer);
   server.on("/alarm", handleAlarm);
   server.on("/alarmList", handleAlarmList);
+  server.on("/delete", handleDelete);
   server.begin();
   //if(getWifiMode()!=CONNETC_TO_NETWORK)
   //putEEPROMData();
@@ -94,8 +95,8 @@ void loop() {
       strip.show();
       break;
   }
-  server.handleClient();
- /* for (byte i = 0; i < existingAlarms; i++) {
-    Serial.printf("Alarm n. %d --- dayCode:%d%d%d%d%d%d%d,%d, %d:%d\n", i, alarms[i].weekDay[0], alarms[i].weekDay[1], alarms[i].weekDay[2], alarms[i].weekDay[3], alarms[i].weekDay[4], alarms[i].weekDay[5], alarms[i].weekDay[6], alarms[i].oneTime, alarms[i].hour, alarms[i].min);
+  server.handleClient(); /*
+  for (byte i = 0; i < existingAlarms; i++) {
+    Serial.printf("Alarm n. %d --- dayCode:%d%d%d%d%d%d%d,%d, AlreadyRinged:%d, %d:%d\n", i, alarms[i].weekDay[0], alarms[i].weekDay[1], alarms[i].weekDay[2], alarms[i].weekDay[3], alarms[i].weekDay[4], alarms[i].weekDay[5], alarms[i].weekDay[6], alarms[i].oneTime,alarms[i].alreadyRinged, alarms[i].hour, alarms[i].min);
   }*/
 }

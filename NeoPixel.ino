@@ -18,7 +18,6 @@ void drawPointer(byte num, byte size, uint32_t color) {
   //Serial.println("");
 }
 
-
 void drawTimer() {
   if (!clockRinging) {
     strip.clear();
@@ -58,14 +57,9 @@ void ring(bool ringType, byte alarmNumber) {
           onTimer = 0;
           timerRing = 0;
         } else if (ALARM_RING) {
-          if (alarms[alarmNumber].oneTime) {//delete the alarm
-            for(byte y=alarmNumber;y<existingAlarms;y++){
-              alarms[y]=alarms[y+1];
-            }
-            existingAlarms--;
-            
-          }  
-          else {
+          if (alarms[alarmNumber].oneTime) {  //delete the alarm
+            deleteAlarm(alarmNumber);
+          } else {
             alarms[alarmNumber].alreadyRinged = 1;
           }
         }

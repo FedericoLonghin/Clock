@@ -77,6 +77,5 @@ void readAlarmsfromEEPROM() {
       alarms[i].weekDay[j] = weekCompressed & (1 << j);
     }
     alarms[i].oneTime = weekCompressed & (1 << 7);
-
   }
 }
