@@ -31,8 +31,10 @@ bool alarmsForToday = 1;
 
 ESP8266WebServer server(80);
 
-const char *ssid = "WifiNetwork";
-const char *password = "Password";
+//String ssid = "";
+//String password = "";
+
+bool wifiMode;
 
 
 // NTP things
@@ -87,3 +89,25 @@ float timerPixelCountFloat;
 bool clockRinging;
 bool ringCause;
 byte alarmNumberRinging;
+
+
+#include <EEPROM.h>
+enum EEPROM_ADRESSES {
+  ADDR_WIFI_MODE = 0,
+  ADDR_WIFI_SSID = 1,
+  ADDR_WIFI_PSW = 30,
+  ADDR_ALARM_NUM = 50,
+  ADDR_ALARM_START = 51
+};
+enum ALARM_OFFEST {
+  OFFSET_HOUR,
+  OFFSET_MIN,
+  OFFSET_WEEKCODE,
+  OFFEST_ALREAYRINGED,
+  OFFSET_TOTAL=10
+};
+
+enum wifiMode {
+  CONNETC_TO_NETWORK,
+  CREATE_NETWORK
+};

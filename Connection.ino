@@ -44,6 +44,7 @@ void handleAlarm() {
     alarms[existingAlarms].hour = server.arg("hour").toInt();
     alarms[existingAlarms].min = server.arg("min").toInt();
     existingAlarms++;
+    WriteAlarmsToEEPROM();    
     server.sendHeader("Access-Control-Allow-Origin", "*");
     server.send(200, "text/html", "<!DOCTYPE html><html><head> <meta name='viewport' content='width=device-width, initial-scale=1'> <title>Clock</title></head><body><h1>Done!</h1></body></html>");
   } else {
@@ -70,7 +71,7 @@ void handleAlarmList() {
     page += " - ";
     page += alarms[i].hour;
     page += ":";
-    page+= alarms[i].min;
+    page += alarms[i].min;
   }
   page += "</body></html>";
   server.sendHeader("Access-Control-Allow-Origin", "*");

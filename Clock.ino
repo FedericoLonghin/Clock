@@ -2,6 +2,8 @@
 
 void setup() {
   Serial.begin(9600);
+  EEPROM.begin(512);
+  //EEPROM.write(50,2);EEPROM.commit();
   pinMode(BTN_PIN, INPUT_PULLUP);
   strip.begin();
   strip.show();
@@ -12,8 +14,9 @@ void setup() {
   server.on("/timer", handleTimer);
   server.on("/alarm", handleAlarm);
   server.on("/alarmList", handleAlarmList);
-
   server.begin();
+  //if(getWifiMode()!=CONNETC_TO_NETWORK)
+  //putEEPROMData();
 }
 
 void loop() {
@@ -77,6 +80,8 @@ void loop() {
     case CONNECTING:
       drawPointer(0, 1, strip.Color(255, 255, 0));
       strip.show();
+      getEEPROMData();
+      Serial.printf("ssid:%s, psw:%s", ssid, password);
       connectToWifi();
       fetchTime();
       clockMode = NORMAL;
@@ -90,7 +95,7 @@ void loop() {
       break;
   }
   server.handleClient();
-  /*for(byte i=0;i<existingAlarms;i++){
-  Serial.printf("Alarm n. %d --- dayCode:%d%d%d%d%d%d%d,%d, %d:%d\n",i,alarms[i].weekDay[0],alarms[i].weekDay[1],alarms[i].weekDay[2],alarms[i].weekDay[3],alarms[i].weekDay[4],alarms[i].weekDay[5],alarms[i].weekDay[6],alarms[i].oneTime,alarms[i].hour,alarms[i].min);
-}*/
+  for (byte i = 0; i < existingAlarms; i++) {
+    Serial.printf("Alarm n. %d --- dayCode:%d%d%d%d%d%d%d,%d, %d:%d\n", i, alarms[i].weekDay[0], alarms[i].weekDay[1], alarms[i].weekDay[2], alarms[i].weekDay[3], alarms[i].weekDay[4], alarms[i].weekDay[5], alarms[i].weekDay[6], alarms[i].oneTime, alarms[i].hour, alarms[i].min);
+  }
 }
