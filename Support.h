@@ -1,3 +1,4 @@
+unsigned long int sec;
 struct timeUnit {
   int hour;
   int min;
@@ -6,7 +7,7 @@ struct timeUnit {
 };
 struct timeUnit timeReal;
 struct timeUnit timeFetch;
-int timeLastFetch;
+unsigned long int timeLastFetch;
 
 
 struct alarm {

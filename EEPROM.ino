@@ -58,7 +58,7 @@ void WriteAlarmsToEEPROM() {
     if (alarms[i].oneTime) weekCompressed |= 1 << 7;
 
     EEPROM.write(ADDR_ALARM_START + (OFFSET_TOTAL * i) + OFFSET_WEEKCODE, weekCompressed);
-    Serial.printf("writing on EEPROM weekCompressed: %d;", weekCompressed);
+    //Serial.printf("writing on EEPROM weekCompressed: %d;", weekCompressed);
   }
   EEPROM.commit();
 }

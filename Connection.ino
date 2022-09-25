@@ -38,15 +38,17 @@ void handleAlarm() {
 
   if (existingAlarms < 5) {
     for (byte i = 0; i < 7; i++) {
-      alarms[existingAlarms].weekDay[i] = server.arg(weekDayShort[i]).toInt();
+      alarms[existingAlarms].weekDay[i] = server.arg(weekDayShort[i]) == "on";
     }
-    alarms[existingAlarms].oneTime = server.arg("oneTime").toInt();
-    alarms[existingAlarms].hour = server.arg("hour").toInt();
-    alarms[existingAlarms].min = server.arg("min").toInt();
+    alarms[existingAlarms].oneTime = server.arg("oneTime") == "on";
+    char compressedTime[8];
+    server.arg("time").toCharArray(compressedTime, 8);
+    decodeTime(compressedTime, &alarms[existingAlarms].hour, &alarms[existingAlarms].min);
     existingAlarms++;
     WriteAlarmsToEEPROM();
     server.sendHeader("Access-Control-Allow-Origin", "*");
     server.send(200, "text/html", "<!DOCTYPE html><html><head> <meta name='viewport' content='width=device-width, initial-scale=1'> <title>Clock</title></head><body><h1>Done!</h1></body></html>");
+    Serial.println(compressedTime);
   } else {
     server.sendHeader("Access-Control-Allow-Origin", "*");
     server.send(200, "text/html", "<!DOCTYPE html><html><head> <meta name='viewport' content='width=device-width, initial-scale=1'> <title>Clock</title></head><body><h1>Too many Alarms!</h1></body></html>");

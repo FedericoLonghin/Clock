@@ -12,7 +12,7 @@ void fetchTime() {
 }
 
 void getRealTime() {
-  unsigned long int sec = ((millis() - timeLastFetch) + TIME_CORRECTION_CONSTANT) / 1000;
+  sec = ((millis() - timeLastFetch) + TIME_CORRECTION_CONSTANT) / 1000;
   timeReal.sec = (timeFetch.sec + sec);
   timeReal.min = (timeFetch.min + timeReal.sec / 60);
   timeReal.hour = (timeFetch.hour + timeReal.min / 60);
@@ -56,4 +56,10 @@ void deleteAlarm(byte al) {
     existingAlarms--;
     WriteAlarmsToEEPROM();
   }
+}
+
+
+void decodeTime(char source[6],int* hour,int* min){
+*hour  =(source[0]-'0')*10+source[1]-'0';
+*min  =(source[3]-'0')*10+source[4]-'0';
 }
