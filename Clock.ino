@@ -10,6 +10,7 @@ void setup() {
   strip.setBrightness(brightness_pv);
   clockMode = CONNECTING;
 
+  server.on("/", handleMain);
   server.on("/strip", handleStrip);
   server.on("/timer", handleTimer);
   server.on("/alarm", handleAlarm);

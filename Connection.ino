@@ -11,6 +11,11 @@ void connectToWifi() {
   Serial.println(WiFi.localIP());
 }
 
+void handleMain(){
+  server.sendHeader("Access-Control-Allow-Origin", "*");
+  server.send(200, "text/html", getMainPage());
+
+}
 
 void handleStrip() {
   if (stripMode == AUTO_ON || stripMode == MAN_ON) {
