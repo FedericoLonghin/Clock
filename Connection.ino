@@ -1,4 +1,17 @@
+void createWifiNetwork() {
+  Serial.println("creating network");
+  WiFi.softAP(ssid, password);
+  IPAddress myIP = WiFi.softAPIP();
+  Serial.print("AP IP address: ");
+  Serial.println(myIP);
+  server.on("/", handleAPPage);
+  server.on("/WIFIData", handleWIFIData);
+  server.begin();
+  Serial.println("HTTP server started");
+}
+
 void connectToWifi() {
+  byte attempt = 0;
   Serial.print("Connecting to ");
   Serial.println(ssid);
   WiFi.mode(WIFI_STA);
@@ -6,15 +19,46 @@ void connectToWifi() {
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
+    attempt++;
+    if (attempt >= 20) {
+      wifiMode = CREATE_NETWORK;
+      putEEPROMData();
+      ESP.restart();
+    }
   }
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
+
+  server.on("/", handleMain);
+  server.on("/strip", handleStrip);
+  server.on("/timer", handleTimer);
+  server.on("/alarm", handleAlarm);
+  server.on("/alarmList", handleAlarmList);
+  server.on("/delete", handleDelete);
+  server.begin();
 }
 
-void handleMain(){
+void handleWIFIData() {
+  drawPointer(0, 1, strip.Color(0, 255, 0));
+  strip.show();
+  ssid = server.arg("SSID");
+  password = server.arg("Password");
+  wifiMode = CONNETC_TO_NETWORK;
+  putEEPROMData();
+  server.send(200, "text/plain", "This device is going to reboot...");
+  delay(500);
+  ESP.restart();
+}
+
+void handleAPPage() {
+  drawPointer(0, 1, strip.Color(255, 255, 0));
+  strip.show();
+  server.send(200, "text/html", getAPPage());
+}
+
+void handleMain() {
   server.sendHeader("Access-Control-Allow-Origin", "*");
   server.send(200, "text/html", getMainPage());
-
 }
 
 void handleStrip() {

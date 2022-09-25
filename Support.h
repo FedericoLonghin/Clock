@@ -10,6 +10,7 @@ struct timeUnit timeFetch;
 unsigned long int timeLastFetch;
 
 
+
 struct alarm {
   int hour;
   int min;
@@ -32,10 +33,10 @@ bool alarmsForToday = 1;
 
 ESP8266WebServer server(80);
 
-String ssid = "";
-String password = "";
-
+String ssid = "Clock";
+String password = "12345678";
 bool wifiMode;
+
 
 
 // NTP things
@@ -63,9 +64,10 @@ Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRBW + NEO_KHZ800);
 enum clockMode {
   DARK,
   NORMAL,
-  CONNECTING,
+  INITIALIZING,
   TIMER,
-  RINGING
+  RINGING,
+  NO_WIFI
 };
 enum stripMode {
   MAN_OFF,
@@ -78,7 +80,7 @@ enum ringType {
   TIMER_RING,
   ALARM_RING
 };
-byte clockMode = CONNECTING, stripMode = AUTO_ON;
+byte clockMode, stripMode = AUTO_ON;
 byte fadeStepDuration = 5;
 bool inFade;
 int lastTimeBTNPressed, lastFadeStep;
@@ -109,8 +111,10 @@ enum ALARM_OFFEST {
 };
 
 enum wifiMode {
-  CONNETC_TO_NETWORK,
-  CREATE_NETWORK
+  CREATE_NETWORK,
+  CONNETC_TO_NETWORK
 };
 
 #define TIME_CORRECTION_CONSTANT 200
+
+bool APConfigured;
