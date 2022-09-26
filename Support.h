@@ -18,7 +18,7 @@ struct alarm {
   bool weekDay[7];
   bool alreadyRinged;
 };
-String weekDayShort[7] = { "sun", "mon", "tue", "wed", "thu", "fri", "sat" };
+String weekDayShort[7] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
 
 struct alarm alarms[5];
 byte existingAlarms = 0;

@@ -181,12 +181,16 @@
                 Alarm List
             </div>
             <div class='modal' id='alarmListModal'>
+                <!--No alarms available!-->
+               
                 <div class="alarm-list-row">
                     <div class="alarm-list-time alarm-list-col">
                         <div class="alarm-list-hour ">08:30 </div>
                         <div class="alarm-list-day ">Mon, Tue, Wed, Thu, Fri</div>
                     </div>
-                    <div class="alarm-list-col alarm-list-delete" onclick="console.log('deleted');"><span
+                    <div class="alarm-list-col alarm-list-delete"
+                        onclick='Http.open("GET", url+"/delete?alarm=1");Http.send(); location.reload();
+                        '><span
                             class="material-symbols-outlined">delete</span></div>
                     <div style="clear:both;"></div>
 
@@ -200,7 +204,8 @@
                             class="material-symbols-outlined">delete</span></div>
                     <div style="clear:both;"></div>
 
-                </div><div class="alarm-list-row">
+                </div>
+                <div class="alarm-list-row">
                     <div class="alarm-list-time alarm-list-col">
                         <div class="alarm-list-hour ">10:00 </div>
                         <div class="alarm-list-day ">One Time</div>
@@ -210,7 +215,6 @@
                     <div style="clear:both;"></div>
 
                 </div>
-
             </div>
         </div>
     </div>

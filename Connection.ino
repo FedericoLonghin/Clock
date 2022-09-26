@@ -70,7 +70,7 @@ void handleStrip() {
     brightness_sp = brightness_default;
   }
   server.sendHeader("Access-Control-Allow-Origin", "*");
-  server.send(200, "text/html", "<!DOCTYPE html><html><head> <meta name='viewport' content='width=device-width, initial-scale=1'> <title>Clock</title></head><body><h1>Done!</h1></body></html>");
+  server.send(200, "text/html", "  <meta http-equiv='refresh' content='0; URL=/'>");
   Serial.println("request");
 }
 void handleTimer() {
@@ -80,28 +80,28 @@ void handleTimer() {
   clockMode = TIMER;
 
   server.sendHeader("Access-Control-Allow-Origin", "*");
-  server.send(200, "text/html", "<!DOCTYPE html><html><head> <meta name='viewport' content='width=device-width, initial-scale=1'> <title>Clock</title></head><body><h1>Done!</h1></body></html>");
+  server.send(200, "text/html", "  <meta http-equiv='refresh' content='0; URL=/'>");
 }
 
 void handleAlarm() {
 
-  if (existingAlarms < 5) {
-    for (byte i = 0; i < 7; i++) {
-      alarms[existingAlarms].weekDay[i] = server.arg(weekDayShort[i]) == "on";
+  bool oneTimeNotFirstDay=0;  //for saving only one day when in onetime mode
+  alarms[existingAlarms].oneTime = server.arg("oneTime") == "on";
+  for (byte i = 0; i < 7; i++) {
+    alarms[existingAlarms].weekDay[i] = (server.arg(weekDayShort[i]) == "on") && !oneTimeNotFirstDay;
+    if (alarms[existingAlarms].weekDay[i] && alarms[existingAlarms].oneTime) {
+      oneTimeNotFirstDay = 1;
+      Serial.println("aaa");
     }
-    alarms[existingAlarms].oneTime = server.arg("oneTime") == "on";
-    char compressedTime[8];
-    server.arg("time").toCharArray(compressedTime, 8);
-    decodeTime(compressedTime, &alarms[existingAlarms].hour, &alarms[existingAlarms].min);
-    existingAlarms++;
-    WriteAlarmsToEEPROM();
-    server.sendHeader("Access-Control-Allow-Origin", "*");
-    server.send(200, "text/html", "<!DOCTYPE html><html><head> <meta name='viewport' content='width=device-width, initial-scale=1'> <title>Clock</title></head><body><h1>Done!</h1></body></html>");
-    Serial.println(compressedTime);
-  } else {
-    server.sendHeader("Access-Control-Allow-Origin", "*");
-    server.send(200, "text/html", "<!DOCTYPE html><html><head> <meta name='viewport' content='width=device-width, initial-scale=1'> <title>Clock</title></head><body><h1>Too many Alarms!</h1></body></html>");
   }
+
+  char compressedTime[8];
+  server.arg("time").toCharArray(compressedTime, 8);
+  decodeTime(compressedTime, &alarms[existingAlarms].hour, &alarms[existingAlarms].min);
+  existingAlarms++;
+  WriteAlarmsToEEPROM();
+  server.sendHeader("Access-Control-Allow-Origin", "*");
+  server.send(200, "text/html", "  <meta http-equiv='refresh' content='0; URL=/'>");
 }
 
 void handleAlarmList() {
