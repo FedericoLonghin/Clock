@@ -59,8 +59,8 @@
 
 
         .modal-visible {
-            height: auto;
-            display: block;
+            height: auto !important;
+            display: block !important;
 
         }
 
@@ -155,12 +155,50 @@
             align-self: center;
             margin-top: 20px;
         }
+
+        #modal-clock-ringing .button-body {
+            background-color: lightcoral;
+            margin: 10px;
+        }
+
+        #modal-clock-ringing {
+            display: none;
+            height: 0;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        #modal-clock-ringing p {
+            font-size: 18px;
+        }
     </style>
     <script>
         const Http = new XMLHttpRequest();
         const url = 'http://192.168.0.105';
         function showModal(modalId) {
             document.getElementById(modalId).classList.toggle('modal-visible');
+        }
+
+
+        var repeat = window.setInterval(function () {
+            if(httpGet(url + "/isRinging")==1){
+                document.getElementById('modal-clock-ringing').classList.add('modal-visible');
+
+            }else{
+                document.getElementById('modal-clock-ringing').classList.remove('modal-visible');
+
+            }
+        }, 5000);
+
+
+        function httpGet(theUrl) {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("GET", theUrl, false);
+            xmlHttp.send(null);
+            return xmlHttp.responseText;
         }
     </script>
 </head>
@@ -170,6 +208,12 @@
     <nav>
         Clock
     </nav>
+    <div class='button' id="modal-clock-ringing">
+        <div class='button-body simple-button' onclick='Http.open("GET", url+"/stop");Http.send();'>
+            Clock ringing!
+            <p>Press to stop</p>
+        </div>
+    </div>
     <div class='button'>
         <div class='button-body simple-button' onclick='Http.open("GET", url+"/strip");Http.send();'>
             Toggle Strip
@@ -182,16 +226,14 @@
             </div>
             <div class='modal' id='alarmListModal'>
                 <!--No alarms available!-->
-               
+
                 <div class="alarm-list-row">
                     <div class="alarm-list-time alarm-list-col">
                         <div class="alarm-list-hour ">08:30 </div>
                         <div class="alarm-list-day ">Mon, Tue, Wed, Thu, Fri</div>
                     </div>
-                    <div class="alarm-list-col alarm-list-delete"
-                        onclick='Http.open("GET", url+"/delete?alarm=1");Http.send(); location.reload();
-                        '><span
-                            class="material-symbols-outlined">delete</span></div>
+                    <div class="alarm-list-col alarm-list-delete" onclick='Http.open("GET", url+"/delete?alarm=1");Http.send(); location.reload();
+                        '><span class="material-symbols-outlined">delete</span></div>
                     <div style="clear:both;"></div>
 
                 </div>
