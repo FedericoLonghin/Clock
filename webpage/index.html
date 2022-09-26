@@ -5,7 +5,8 @@
     <meta charset='utf-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1' />
     <title>Clock - Manager</title>
-
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <style>
         @import url(https://fonts.googleapis.com/css?family=Poppins);
 
@@ -49,18 +50,17 @@
 
 
         .modal {
-            visibility: hidden;
             height: 0;
             font-size: 20px;
             text-align: left;
-            display: block;
+            display: none;
 
         }
 
 
         .modal-visible {
-            visibility: visible;
             height: auto;
+            display: block;
 
         }
 
@@ -106,8 +106,54 @@
             font-size: 20px;
         }
 
-        .time-inputs{
+        .time-inputs {
             max-width: 75px;
+        }
+
+        .alarm-list-row {
+            clear: left;
+            margin-bottom: 10px;
+            height: 80px;
+            align-items: center;
+            border-radius: 16px;
+            border: solid;
+            padding: 5px 10px;
+            border-color: #424242;
+            border-width: .8px;
+            background-color: #eee;
+        }
+
+        .alarm-list-col {
+            float: left;
+        }
+
+        .alarm-list-time {
+            width: 90%;
+        }
+
+        .alarm-list-hour {
+            width: 100%;
+            height: 100%;
+            font-size: 30px;
+        }
+
+        .alarm-list-day {
+            width: 100%;
+            height: 100%;
+            font-size: 15px;
+        }
+
+        .alarm-list-delete {
+            padding: 0px;
+            width: 10%;
+            height: 100%;
+            margin-left: 0;
+        }
+
+        .material-symbols-outlined {
+            font-size: 30px;
+            align-self: center;
+            margin-top: 20px;
         }
     </style>
     <script>
@@ -129,17 +175,125 @@
             Toggle Strip
         </div>
     </div>
-
     <div class='button'>
         <div class='button-body'>
-            <div onclick='showModal("timerModal");'>
+            <div onclick='showModal("alarmListModal");'>
+                Alarm List
+            </div>
+            <div class='modal' id='alarmListModal'>
+                <div class="alarm-list-row">
+                    <div class="alarm-list-time alarm-list-col">
+                        <div class="alarm-list-hour ">08:30 </div>
+                        <div class="alarm-list-day ">Mon, Tue, Wed, Thu, Fri</div>
+                    </div>
+                    <div class="alarm-list-col alarm-list-delete" onclick="console.log('deleted');"><span
+                            class="material-symbols-outlined">delete</span></div>
+                    <div style="clear:both;"></div>
+
+                </div>
+                <div class="alarm-list-row">
+                    <div class="alarm-list-time alarm-list-col">
+                        <div class="alarm-list-hour ">22:30 </div>
+                        <div class="alarm-list-day ">Every day</div>
+                    </div>
+                    <div class="alarm-list-col alarm-list-delete" onclick="console.log('deleted');"><span
+                            class="material-symbols-outlined">delete</span></div>
+                    <div style="clear:both;"></div>
+
+                </div><div class="alarm-list-row">
+                    <div class="alarm-list-time alarm-list-col">
+                        <div class="alarm-list-hour ">10:00 </div>
+                        <div class="alarm-list-day ">One Time</div>
+                    </div>
+                    <div class="alarm-list-col alarm-list-delete" onclick="console.log('deleted');"><span
+                            class="material-symbols-outlined">delete</span></div>
+                    <div style="clear:both;"></div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class='button'>
+        <div class='button-body'>
+            <div onclick='showModal("newAlarmModal");'>
+                New Alarm
+            </div>
+            <div class='modal' id='newAlarmModal'>
+                <form id='alarmForm' method='get' action='http://192.168.0.105/alarm'>
+
+                    <div class='modal-section'>
+                        When will it ring?
+                        <div class='checkbox-container'>
+                            <div class='checkbox-item'>
+                                <div class='checkbox-item'>
+
+                                    <label for='time'>Select a time:</label>
+
+                                    <input type='time' id='time' name='time' class="time-inputs">
+                                </div>
+                            </div>
+                            <div class='checkbox-item'>
+                                <input type='checkbox' id='mon' name='mon'>
+                                <label for='mon'>Monday</label>
+                            </div>
+                            <div class='checkbox-item'>
+                                <input type='checkbox' id='tue' name='tue'>
+                                <label for='tue'>Tuesday</label>
+                            </div>
+                            <div class='checkbox-item'>
+                                <input type='checkbox' id='wed' name='wed'>
+                                <label for='wed'>Wednesday</label>
+                            </div>
+                            <div class='checkbox-item'>
+                                <input type='checkbox' id='thu' name='thu'>
+                                <label for='thu'>Thursday</label>
+                            </div>
+                            <div class='checkbox-item'>
+                                <input type='checkbox' id='fri' name='fri'>
+                                <label for='fri'>Friday</label>
+                            </div>
+                            <div class='checkbox-item'>
+                                <input type='checkbox' id='sat' name='sat'>
+                                <label for='sat'>Saturday</label>
+                            </div>
+                            <div class='checkbox-item'>
+                                <input type='checkbox' id='sun' name='sun'>
+                                <label for='sun'>Sunday</label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class='modal-section'>
+                        Repeat only one time
+
+                        <div class='checkbox-container'>
+                            <div class='checkbox-item'>
+                                <input type='checkbox' id='oneTime' name='oneTime'>
+                                <label for='oneTime'>Onetime</label>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <input type='submit' class='submit-button' form='alarmForm' value='Set'>
+            </div>
+            </form>
+        </div>
+
+    </div>
+    <div class='button'>
+        <div class='button-body'>
+            <div onclick='showModal("newTimerModal");'>
                 New Timer
             </div>
-            <div class='modal' id='timerModal'>
+            <div class='modal' id='newTimerModal'>
                 <form id='timerForm' method='get' action='http://192.168.0.105/timer'>
 
                     <div class='modal-section'>
-                       How many seconds?
+                        How many seconds?
                         <div class='checkbox-container'>
                             <div class='checkbox-item'>
                                 <div class='checkbox-item'>
@@ -149,82 +303,13 @@
                                 </div>
                             </div>
 
-                            <input type='submit' class='submit-button' form='alarmForm' value='Set'>
+                            <input type='submit' class='submit-button' form='timerForm' value='Set'>
                         </div>
                 </form>
             </div>
-</div>
         </div>
-        <div class='button'>
-            <div class='button-body'>
-                <div onclick='showModal("alarmModal");'>
-                    New Alarm
-                </div>
-                <div class='modal' id='alarmModal'>
-                    <form id='alarmForm' method='get' action='http://192.168.0.105/alarm'>
+    </div>
 
-                        <div class='modal-section'>
-                            When will it ring?
-                            <div class='checkbox-container'>
-                                <div class='checkbox-item'>
-                                    <div class='checkbox-item'>
-
-                                        <label for='time'>Select a time:</label>
-
-                                        <input type='time' id='time' name='time' class="time-inputs">
-                                    </div>
-                                </div>
-                                <div class='checkbox-item'>
-                                    <input type='checkbox' id='mon' name='mon'>
-                                    <label for='mon'>Monday</label>
-                                </div>
-                                <div class='checkbox-item'>
-                                    <input type='checkbox' id='tue' name='tue'>
-                                    <label for='tue'>Tuesday</label>
-                                </div>
-                                <div class='checkbox-item'>
-                                    <input type='checkbox' id='wed' name='wed'>
-                                    <label for='wed'>Wednesday</label>
-                                </div>
-                                <div class='checkbox-item'>
-                                    <input type='checkbox' id='thu' name='thu'>
-                                    <label for='thu'>Thursday</label>
-                                </div>
-                                <div class='checkbox-item'>
-                                    <input type='checkbox' id='fri' name='fri'>
-                                    <label for='fri'>Friday</label>
-                                </div>
-                                <div class='checkbox-item'>
-                                    <input type='checkbox' id='sat' name='sat'>
-                                    <label for='sat'>Saturday</label>
-                                </div>
-                                <div class='checkbox-item'>
-                                    <input type='checkbox' id='sun' name='sun'>
-                                    <label for='sun'>Sunday</label>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class='modal-section'>
-                            Repeat only one time
-
-                            <div class='checkbox-container'>
-                                <div class='checkbox-item'>
-                                    <input type='checkbox' id='oneTime' name='oneTime'>
-                                    <label for='oneTime'>Onetime</label>
-                                </div>
-
-
-                            </div>
-                        </div>
-
-                        <input type='submit' class='submit-button' form='alarmForm' value='Set'>
-                </div>
-                </form>
-            </div>
-
-        </div>
 
 </body>
 
