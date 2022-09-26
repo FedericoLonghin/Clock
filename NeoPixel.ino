@@ -52,11 +52,11 @@ void ring(bool ringType, byte alarmNumber) {
       if (clockRinging) {  //entering here only one time
         clockRinging = 0;
         clockMode = NORMAL;
-        if (TIMER_RING) {
+        if (ringType==TIMER_RING) {
 
           onTimer = 0;
           timerRing = 0;
-        } else if (ALARM_RING) {
+        } else if (ringType==ALARM_RING) {
           if (alarms[alarmNumber].oneTime) {  //delete the alarm
             deleteAlarm(alarmNumber);
           } else {

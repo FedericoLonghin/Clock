@@ -35,6 +35,8 @@ void connectToWifi() {
   server.on("/alarm", handleAlarm);
   server.on("/alarmList", handleAlarmList);
   server.on("/delete", handleDelete);
+  server.on("/stop", handleStop);
+  server.on("/isRinging", handleIsRinging);
   server.begin();
 }
 
@@ -84,8 +86,7 @@ void handleTimer() {
 }
 
 void handleAlarm() {
-
-  bool oneTimeNotFirstDay=0;  //for saving only one day when in onetime mode
+  bool oneTimeNotFirstDay = 0;  //for saving only one day when in onetime mode
   alarms[existingAlarms].oneTime = server.arg("oneTime") == "on";
   for (byte i = 0; i < 7; i++) {
     alarms[existingAlarms].weekDay[i] = (server.arg(weekDayShort[i]) == "on") && !oneTimeNotFirstDay;
@@ -142,4 +143,29 @@ void handleDelete() {
   }
   server.sendHeader("Access-Control-Allow-Origin", "*");
   server.send(200, "text/html", page);
+}
+
+void handleStop() {
+  Serial.println("stop");
+  if (clockRinging) {  //entering here only one time
+    clockRinging = 0;
+    clockMode = NORMAL;
+    if (TIMER_RING) {
+
+      onTimer = 0;
+      timerRing = 0;
+    } else if (ALARM_RING) {
+      if (alarms[alarmNumberRinging].oneTime) {  //delete the alarm
+        deleteAlarm(alarmNumberRinging);
+      } else {
+        alarms[alarmNumberRinging].alreadyRinged = 1;
+      }
+    }
+  }
+  server.sendHeader("Access-Control-Allow-Origin", "*");
+  server.send(200, "text/plain", "Timer stopped");
+}
+void handleIsRinging() {
+  server.sendHeader("Access-Control-Allow-Origin", "*");
+  server.send(200, "text/plain", (String)clockRinging);
 }
