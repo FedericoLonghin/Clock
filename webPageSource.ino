@@ -6,8 +6,10 @@ String getMainPage() {
   }
   for (byte i = 0; i < existingAlarms; i++) {
     html += "<div class='alarm-list-row'> <div class='alarm-list-time alarm-list-col'> <div class='alarm-list-hour '>";
+    html+=alarms[i].hour<10?"0":"";
     html += alarms[i].hour;
     html += ":";
+    html+=alarms[i].min<10?"0":"";
     html += alarms[i].min;
     html += "</div> <div class='alarm-list-day '>";
     html += alarms[i].oneTime ? "One time, " : "";

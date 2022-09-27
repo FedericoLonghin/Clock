@@ -4,8 +4,10 @@ void setup() {
   Serial.begin(9600);
   EEPROM.begin(512);
   strip.begin();
-  strip.show();
   strip.setBrightness(brightness_pv);
+  drawPointer(0, 1, strip.Color(255, 255, 0));
+  strip.show();
+
   if (getWifiMode() == CREATE_NETWORK) {
     clockMode = NO_WIFI;
   } else {
@@ -60,23 +62,16 @@ void loop() {
   } else inFade = 0;
 
   if (!clockRinging) checkForAlarms();
+  getRealTime();
 
 
   //CLOCK_MODE MANAGER
-  switch (clockMode * (stripMode == MAN_ON || stripMode == AUTO_ON)) {
-    case DARK:
-      if (!inFade) {
-        strip.clear();
-        strip.show();
-      }
-      break;
+  switch (clockMode) {
+
     case NORMAL:
-      getRealTime();
-      drawTime();
+
       break;
     case INITIALIZING:
-      drawPointer(0, 1, strip.Color(255, 255, 0));
-      strip.show();
       getEEPROMData();
       connectToWifi();
       fetchTime();
@@ -84,6 +79,46 @@ void loop() {
       break;
     case TIMER:
       if (!clockRinging) getRemainingTime();
+      break;
+
+    case NO_WIFI:
+      if (!APConfigured) {
+        createWifiNetwork();
+      }
+      break;
+  }
+
+  if (stripMode == MAN_ON || stripMode == AUTO_ON) {
+    if (clockMode == NORMAL) drawTime();
+    else if (clockMode == TIMER) drawTimer();
+    else if (clockMode == NO_WIFI) {
+      if (!APConfigured) {
+        drawPointer(0, 1, strip.Color(255, 0, 0));
+        strip.show();
+        APConfigured = 1;
+      }
+    }
+  } else {
+    if (!inFade) {
+      strip.clear();
+      strip.show();
+    }
+  }
+
+
+/*
+  switch (clockRinging ? RINGING : (clockMode * (stripMode == MAN_ON || stripMode == AUTO_ON))) {
+    case DARK:
+      if (!inFade) {
+        strip.clear();
+        strip.show();
+      }
+      break;
+    case NORMAL:
+      drawTime();
+      break;
+
+    case TIMER:
       drawTimer();
       break;
     case RINGING:
@@ -93,11 +128,12 @@ void loop() {
       if (!APConfigured) {
         drawPointer(0, 1, strip.Color(255, 0, 0));
         strip.show();
-        createWifiNetwork();
         APConfigured = 1;
       }
       break;
   }
+*/
+
   server.handleClient();
   /*
   for (byte i = 0; i < existingAlarms; i++) {
